@@ -8,6 +8,8 @@ import math
 the_desktop = os.path.join('C:\\Users',getpass.getuser(),'Desktop')
 os.chdir(the_desktop)
 
+vibrator_name = input('Input a name for the accelerometer test (Model and Test #): ')
+
 print('Compiling A0.')
 with open('AccelA0_data.csv', 'w') as f:
     f.write('Accelerometer,X-Accel,Y-Accel,Z-Accel,Magnitude\n')
@@ -147,3 +149,15 @@ with open('sensors.txt', 'r') as f:
     
 print('A3 Complete!')
 
+print('Cleaning Up...')
+#cleaning up by zipping the two files, and removing the directory
+os.chdir(the_desktop)
+new_zip = zipfile.ZipFile(vibrator_name + '.zip', 'w')
+new_zip.write('AccelA0_data.csv', compress_type=zipfile.ZIP_DEFLATED)
+new_zip.write('AccelA1_data.csv', compress_type=zipfile.ZIP_DEFLATED)
+new_zip.write('AccelA2_data.csv', compress_type=zipfile.ZIP_DEFLATED)
+new_zip.write('AccelA3_data.csv', compress_type=zipfile.ZIP_DEFLATED)
+new_zip.close()
+
+print('Zip file complete!')
+input()
