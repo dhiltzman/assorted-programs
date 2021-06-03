@@ -24,6 +24,9 @@ print('Compiling..')
     #f.write('Vendor,Name,Material,Vendor Material Number,Material Description,Planned Lead Times,UPDATED Lead Times,Comments\n')
 
 with open('EXPORT.tsv', 'r') as f:
+    #Declaring var for comparision
+    previous_name = ''
+    line_number = 0
     for line in f:
         #print(line)
         #'\t' splits from the tabs
@@ -32,6 +35,10 @@ with open('EXPORT.tsv', 'r') as f:
 
         vendor = split[0]
         name = split[1]
+
+        if (name.startswith('"'):
+            name = name[1:-1]
+            
         material = split[2]
         vendor_material = split[3]
         description = split[4]
@@ -46,14 +53,27 @@ with open('EXPORT.tsv', 'r') as f:
 
         #If the file_name isn't the same as the previous Vendor Name creates a new file with the new file name
         #This SHOULD create a new file everytime a new vendor shows up.
-        if (file_name != previous_name):
-            with open('file_name.csv', 'w') as f:
-                f.write('Vendor,Name,Material,Vendor Material Number,Material Description,Planned Lead Times,UPDATED Lead Times,Comments\n')
-                print('New Vendor file added')
 
+        #Skips first line
+        if (file_name == 'Vendor Name'):
+            continue
+        #Creates a new file if not found
+        if (file_name != previous_name):
+            with open(file_name + '.tsv', 'w') as f:
+                f.write('Vendor \t Name \t Material \t Vendor Material Number \t Material Description \t Planned Lead Times \t UPDATED Lead Times \t Comments\n')
+                print('New Vendor file added')
+        #Writes line to csv 
+        elif (file_name == previous_name):
+            full_data = vendor + '\t' + name + '\t' + material + '\t' + vendor_material + '\t' + description + '\t' + planned_PDT + '\t' + updated_PDT + '\t' + comments
+            with open(file_name + '.tsv', 'a') as f:
+                #print(full_data)
+                f.write(full_data)
+                print('Write line complete')
         #This allots the current name to become the previous name for the next loop
         previous_name = file_name
-        print(file_name)
+        line_number = line_number + 1
+        print('Line Number: ' + str(line_number))
+        #print(file_name)
     
 print('Complete!')
 
