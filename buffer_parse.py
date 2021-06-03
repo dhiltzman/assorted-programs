@@ -15,13 +15,25 @@ import zipfile
 the_desktop = os.path.join('C:\\Users',getpass.getuser(),'Desktop')
 os.chdir(the_desktop)
 
-#nested_folder = os.path.join('C:\\Users',getpass.getuser(),'Desktop', vibrator_name)
-#os.makedirs(nested_folder)
+folder_name = input('Please enter a folder name to save files in: ')
 
+folder = os.path.join('C:\\Users',getpass.getuser(),'Desktop', folder_name)
+
+if os.path.exists(folder) == True:
+    print('Path already exists')
+    print()
+elif os.path.exists(folder) == False:
+    print('Path does not exist')
+    os.makedirs(folder)
+    print('Path created')
+    print()
+else:
+    print('something went wrong')
+    print()
+
+os.chdir(folder)
 print('Compiling..')
-
-#with open('AccelA0_data.csv', 'w') as f:
-    #f.write('Vendor,Name,Material,Vendor Material Number,Material Description,Planned Lead Times,UPDATED Lead Times,Comments\n')
+print('Please wait.')
 
 with open('EXPORT.tsv', 'r') as f:
     #Declaring var for comparision
@@ -36,7 +48,7 @@ with open('EXPORT.tsv', 'r') as f:
         vendor = split[0]
         name = split[1]
 
-        if (name.startswith('"'):
+        if (name.startswith('"')):
             name = name[1:-1]
             
         material = split[2]
@@ -61,18 +73,19 @@ with open('EXPORT.tsv', 'r') as f:
         if (file_name != previous_name):
             with open(file_name + '.tsv', 'w') as f:
                 f.write('Vendor \t Name \t Material \t Vendor Material Number \t Material Description \t Planned Lead Times \t UPDATED Lead Times \t Comments\n')
-                print('New Vendor file added')
+                #print('New Vendor file added')
         #Writes line to csv 
         elif (file_name == previous_name):
             full_data = vendor + '\t' + name + '\t' + material + '\t' + vendor_material + '\t' + description + '\t' + planned_PDT + '\t' + updated_PDT + '\t' + comments
             with open(file_name + '.tsv', 'a') as f:
                 #print(full_data)
                 f.write(full_data)
-                print('Write line complete')
+                #print('Write line complete')
         #This allots the current name to become the previous name for the next loop
         previous_name = file_name
         line_number = line_number + 1
-        print('Line Number: ' + str(line_number))
+
+        #print('Line Number: ' + str(line_number))
         #print(file_name)
     
 print('Complete!')
