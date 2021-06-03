@@ -23,12 +23,11 @@ if os.path.exists(folder) == True:
     print('Path already exists')
     print()
 elif os.path.exists(folder) == False:
-    print('Path does not exist')
     os.makedirs(folder)
     print('Path created')
     print()
 else:
-    print('something went wrong')
+    print('Something went wrong')
     print()
 
 print('Compiling..')
@@ -36,6 +35,7 @@ print('Please wait.')
 
 with open('EXPORT.tsv', 'r') as f:
     #Declaring var for comparision
+    os.chdir(folder)
     previous_name = ''
     line_number = 0
     for line in f:
@@ -65,16 +65,22 @@ with open('EXPORT.tsv', 'r') as f:
         #If the file_name isn't the same as the previous Vendor Name creates a new file with the new file name
         #This SHOULD create a new file everytime a new vendor shows up.
 
-        os.chdir(folder)
-
         #Skips first line
         if (file_name == 'Vendor Name'):
             continue
+
+        #This looks for a forward slash
+        #if found, its a problem since it's an escape and will not create a file name.
+        if "/" in file_name:
+            #print("/ found")
+            file_name = file_name.replace("/", " ")
+            
         #Creates a new file if not found
         if (file_name != previous_name):
             with open(file_name + '.tsv', 'w') as f:
                 f.write('Vendor \t Name \t Material \t Vendor Material Number \t Material Description \t Planned Lead Times \t UPDATED Lead Times \t Comments\n')
                 #print('New Vendor file added')
+                
         #Writes line to csv 
         elif (file_name == previous_name):
             full_data = vendor + '\t' + name + '\t' + material + '\t' + vendor_material + '\t' + description + '\t' + planned_PDT + '\t' + updated_PDT + '\t' + comments
