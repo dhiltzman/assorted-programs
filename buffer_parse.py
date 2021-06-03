@@ -31,7 +31,6 @@ else:
     print('something went wrong')
     print()
 
-os.chdir(folder)
 print('Compiling..')
 print('Please wait.')
 
@@ -66,6 +65,8 @@ with open('EXPORT.tsv', 'r') as f:
         #If the file_name isn't the same as the previous Vendor Name creates a new file with the new file name
         #This SHOULD create a new file everytime a new vendor shows up.
 
+        os.chdir(folder)
+
         #Skips first line
         if (file_name == 'Vendor Name'):
             continue
@@ -89,7 +90,5 @@ with open('EXPORT.tsv', 'r') as f:
         #print(file_name)
     
 print('Complete!')
-
-print('Cleaning Up...')
 
 input('Press Enter to close the Program')
